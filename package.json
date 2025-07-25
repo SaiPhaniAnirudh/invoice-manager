@@ -1,0 +1,73 @@
+{
+  "name": "freelancer-invoice-manager",
+  "version": "1.0.0",
+  "description": "Freelancer Invoice Management System with Express backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "build": "echo 'No build step required'",
+    "test": "echo 'No tests specified'",
+    "postinstall": "npm run setup-data",
+    "setup-data": "node -e \"const fs=require('fs'); if(!fs.existsSync('data')){fs.mkdirSync('data');console.log('Data directory created');}\""
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "express-rate-limit": "^7.1.5",
+    "dotenv": "^16.3.1",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "express-validator": "^7.0.1",
+    "morgan": "^1.10.0",
+    "compression": "^1.7.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/freelancer-invoice-manager.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/freelancer-invoice-manager/issues"
+  },
+  "homepage": "https://github.com/yourusername/freelancer-invoice-manager#readme",
+  "keywords": [
+    "invoice",
+    "freelancer",
+    "nodejs",
+    "express",
+    "invoice-generator",
+    "client-management",
+    "billing",
+    "accounting",
+    "small-business",
+    "web-app"
+  ],
+  "author": {
+    "name": "Your Name",
+    "email": "your.email@example.com",
+    "url": "https://yourwebsite.com"
+  },
+  "contributors": [],
+  "license": "MIT",
+  "private": false,
+  "directories": {
+    "data": "./data",
+    "public": "./public"
+  },
+  "files": [
+    "server.js",
+    "public/",
+    "data/",
+    "README.md",
+    "LICENSE"
+  ]
+}

@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Freelancer Invoice Manager</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Auth Styles */
+    .auth-body {
+      background: #f5f6fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+      
+    .auth-container {
+      width: 400px;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      color: #fff;
+      transition: all 0.3s ease;
+    }
+
+    .login-bg {
+      background: linear-gradient(135deg, #ffeb3b, #ff9800, #f44336);
+    }
+
+    .register-bg {
+      background: linear-gradient(135deg, #ff69b4, #3f51b5);
+    }
+
+    .auth-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .auth-container form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .auth-container input[type="text"],
+    .auth-container input[type="email"],
+    .auth-container input[type="password"],
+    .auth-container textarea {
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+      outline: none;
+      color: #333;
+    }
+
+    .auth-container textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    .auth-container button {
+      padding: 12px;
+      background: #ffffff;
+      color: #d84315;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.3s ease;
+    }
+
+    .auth-container button:hover {
+      background: #fbe9e7;
+    }
+
+    .link {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .link a {
+      color: #fff;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #error {
+      text-align: center;
+      color: red;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    /* Main App Styles */
+    .card {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      border-radius: 10px;
+    }
+
+    .card h5 {
+      font-weight: 600;
+    }
+
+    .table th, .table td {
+      vertical-align: middle;
+    }
+
+    /* Client Styles */
+    .client-container {
+      background: #fff;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .client-container h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #343a40;
+    }
+
+    .client-form .form-control,
+    .client-form .btn {
+      border-radius: 8px;
+    }
+
+    .client-form textarea {
+      resize: none;
+    }
+
+    .client-table th,
+    .client-table td {
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    .client-table thead {
+      background-color: #343a40;
+      color: white;
+    }
+
+    /* Invoice Styles */
+    .section-title {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #2c3e50;
+      font-weight: 600;
+    }
+
+    .sub-title {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      font-size: 18px;
+      color: #34495e;
+      font-weight: 500;
+    }
+
+    .form-section {
+      margin-top: 20px;
+    }
+
+    .form-box {
+      padding: 10px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .line-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .btn-outline {
+      background-color: white;
+      border: 1px solid #3498db;
+      color: #3498db;
+      padding: 10px 20px;
+      font-size: 14px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn-outline:hover {
+      background-color: #ecf5fc;
+    }
+
+    /* Invoice History Styles */
+    .invoice-container {
+      background-color: #fff;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .invoice-container h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #343a40;
+    }
+
+    .invoice-table thead {
+      background-color: #343a40;
+      color: #fff;
+      text-align: center;
+    }
+
+    .invoice-table td,
+    .invoice-table th {
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    .btn-group .btn {
+      margin-right: 5px;
+    }
+
+    .btn-template {
+      background-color: #6c757d;
+      color: white;
+    }
+
+    .btn-template:hover {
+      background-color: #5a6268;
+    }
+
+    /* Invoice Detail Styles */
+    .invoice-box {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .invoice-box h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2c3e50;
+    }
+
+    .invoice-box h4 {
+      margin-bottom: 5px;
+      color: #34495e;
+    }
+
+    .info-section {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+
+    .info-box {
+      width: 48%;
+    }
+
+    .invoice-box table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    .invoice-box table thead {
+      background-color: #2c3e50;
+      color: #fff;
+    }
+
+    .invoice-box table, .invoice-box th, .invoice-box td {
+      border: 1px solid #ccc;
+    }
+
+    .invoice-box th, .invoice-box td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    .summary {
+      text-align: right;
+      font-size: 16px;
+    }
+
+    .summary p {
+      margin: 6px 0;
+    }
+
+    .btn-download {
+      display: inline-block;
+      padding: 10px 20px;
+      margin-top: 20px;
+      background-color: #28a745;
+      color: white;
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-download:hover {
+      background-color: #218838;
+    }
+
+    @media print {
+      .btn-download, nav, .no-print {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- AUTHENTICATION SECTION -->
+  <div id="authSection" class="auth-body">
+    <!-- LOGIN FORM -->
+    <div class="auth-container login-bg" id="loginBox">
+      <form id="loginForm" onsubmit="login(event)">
+        <h2>Login</h2>
+        <input type="email" id="username" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <button type="submit">Login</button>
+        <div id="error"></div>
+        <div class="link"><a onclick="showForgot()">Forgot Password?</a></div>
+        <div class="link">Don't have an account? <a onclick="showRegister()">Sign up</a></div>
+      </form>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div class="auth-container register-bg hidden" id="registerBox">
+      <form id="registerForm">
+        <h2>Register</h2>
+        <input type="text" id="registerName" placeholder="Full Name" required />
+        <input type="email" id="registerEmail" placeholder="Email" required />
+        <input type="password" id="registerPassword" placeholder="Password" required />
+        <input type="text" id="contactNumber" placeholder="Contact Number" required maxlength="10" />
+        <textarea id="address" placeholder="Address" required></textarea>
+        <button type="submit">Sign Up</button>
+        <div class="link">Already have an account? <a onclick="showLogin()">Login</a></div>
+      </form>
+    </div>
+
+    <!-- FORGOT PASSWORD FORM -->
+    <div class="auth-container login-bg hidden" id="forgotBox">
+      <form id="forgotForm">
+        <h2>Reset Password</h2>
+        <input type="email" id="forgotEmail" placeholder="Enter your email" required />
+        <button type="submit">Send Reset Link</button>
+        <div class="link"><a onclick="showLogin()">Back to Login</a></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MAIN APPLICATION SECTION -->
+  <div id="mainApp" class="hidden">
+    <!-- NAVIGATION -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark no-print">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#" onclick="showDashboard()">Invoice Manager</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item"><a class="nav-link" href="#" onclick="showNewInvoice()">New Invoice</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" onclick="showInvoiceHistory()">Invoice History</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" onclick="showClients()">Clients</a></li>
+          </ul>
+          <span class="navbar-text me-3">Logged in as <strong>Freelancer</strong></span>
+          <button class="btn btn-outline-light" onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- DASHBOARD -->
+    <div id="dashboardSection" class="container mt-4">
+      <div class="row g-4 mb-4">
+        <div class="col-md-3">
+          <div class="card p-3 text-center bg-primary text-white">
+            <h5>Total Clients</h5>
+            <h2 id="totalClients">0</h2>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card p-3 text-center bg-success text-white">
+            <h5>Total Invoices</h5>
+            <h2 id="totalInvoices">0</h2>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card p-3 text-center bg-warning text-dark">
+            <h5>Total Tax Paid</h5>
+            <h2 id="totalTax">₹0</h2>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card p-3 text-center bg-info text-white">
+            <h5>Total Revenue</h5>
+            <h2 id="totalRevenue">₹0</h2>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header bg-dark text-white">
+          Active Clients & Payments
+        </div>
+        <div class="card-body p-0">
+          <table class="table table-striped m-0">
+            <thead class="table-light">
+              <tr>
+                <th>Client Name</th>
+                <th>Email</th>
+                <th>Total Invoices</th>
+                <th>Total Amount Paid</th>
+              </tr>
+            </thead>
+            <tbody id="clientSummaryTable">
+              <tr><td colspan="4" class="text-center">No clients yet</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLIENTS SECTION -->
+    <div id="clientsSection" class="container mt-4 hidden">
+      <div class="client-container">
+        <h2>Clients</h2>
+
+        <form id="clientForm" class="client-form mb-4">
+          <div class="row g-3">
+            <div class="col-md-3">
+              <input name="name" class="form-control" placeholder="Client Name" required>
+            </div>
+            <div class="col-md-3">
+              <input name="email" type="email" class="form-control" placeholder="Email" required>
+            </div>
+            <div class="col-md-4">
+              <textarea name="address" class="form-control" placeholder="Address" rows="1" required></textarea>
+            </div>
+            <div class="col-md-2 d-grid">
+              <button type="submit" class="btn btn-success">Add Client</button>
+            </div>
+          </div>
+        </form>
+
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover client-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="clientsTable">
+              <tr><td colspan="4" class="text-center">No clients yet</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEW INVOICE SECTION -->
+    <div id="newInvoiceSection" class="container mt-4 hidden">
+      <div class="client-container">
+        <h2 class="section-title">Create New Invoice</h2>
+
+        <form id="invoiceForm" class="form-section">
+          <div class="row">
+            <div class="col-md-6 form-box">
+              <h5 class="sub-title">Freelancer Info</h5>
+              <input type="text" name="freelancer_name" class="form-input" placeholder="Your Name" required>
+              <input type="email" name="freelancer_email" class="form-input" placeholder="Your Email" required>
+              <textarea name="freelancer_address" class="form-input" rows="3" placeholder="Your Address" required></textarea>
+            </div>
+
+            <div class="col-md-6 form-box">
+              <h5 class="sub-title">Client Info</h5>
+              <select name="client_id" class="form-input" required id="clientSelect">
+                <option disabled selected>Select Client</option>
+              </select>
+            </div>
+          </div>
+
+          <h5 class="sub-title mt-4">Line Items</h5>
+          <div id="items">
+            <div class="row line-item">
+              <div class="col"><input name="description" class="form-input" placeholder="Description" required></div>
+              <div class="col"><input type="number" name="quantity" class="form-input" placeholder="Qty" required></div>
+              <div class="col"><input type="number" step="0.01" name="price" class="form-input" placeholder="Price" required></div>
+              <div class="col-auto"><button type="button" class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button></div>
+            </div>
+          </div>
+
+          <button type="button" onclick="addItem()" class="btn btn-outline mb-3">+ Add Item</button>
+
+          <div class="form-group">
+            <label class="form-label">Tax Percentage (%)</label>
+            <input type="number" step="0.01" name="tax_percent" class="form-input" placeholder="e.g. 18" required>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Create Invoice</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- INVOICE HISTORY SECTION -->
+    <div id="invoiceHistorySection" class="container mt-4 hidden">
+      <div class="invoice-container">
+        <h2>Invoice History</h2>
+
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped invoice-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Client</th>
+                <th>Date</th>
+                <th>Tax (%)</th>
+                <th>Total Amount</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="invoiceHistoryTable">
+              <tr><td colspan="6" class="text-center">No invoices yet</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- INVOICE DETAIL SECTION -->
+    <div id="invoiceDetailSection" class="container mt-4 hidden">
+      <div class="invoice-box">
+        <h2>Invoice</h2>
+
+        <div class="info-section">
+          <div class="info-box">
+            <h4>Freelancer:</h4>
+            <p id="invoiceFreelancerInfo">
+              <!-- Dynamic content -->
+            </p>
+          </div>
+          <div class="info-box">
+            <h4>Client:</h4>
+            <p id="invoiceClientInfo">
+              <!-- Dynamic content -->
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <h4>Invoice Date:</h4>
+          <p id="invoiceDate"><!-- Dynamic content --></p>
+        </div>
+
+        <div>
+          <h4>Items:</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody id="invoiceItemsTable">
+              <!-- Dynamic content -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="summary" id="invoiceSummary">
+          <!-- Dynamic content -->
+        </div>
+
+        <button onclick="printInvoice()" class="btn-download no-print">Print Invoice</button>
+        <button onclick="showInvoiceHistory()" class="btn btn-secondary no-print ms-2">Back to History</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Global variables
+    let clients = [];
+    let invoices = [];
+    let currentInvoiceId = 0;
+
+    // Authentication functions
+    const authSection = document.getElementById("authSection");
+    const mainApp = document.getElementById("mainApp");
+    const loginBox = document.getElementById("loginBox");
+    const registerBox = document.getElementById("registerBox");
+    const forgotBox = document.getElementById("forgotBox");
+
+    function showRegister() {
+      loginBox.classList.add("hidden");
+      registerBox.classList.remove("hidden");
+      forgotBox.classList.add("hidden");
+    }
+
+    function showLogin() {
+      loginBox.classList.remove("hidden");
+      registerBox.classList.add("hidden");
+      forgotBox.classList.add("hidden");
+    }
+
+    function showForgot() {
+      loginBox.classList.add("hidden");
+      registerBox.classList.add("hidden");
+      forgotBox.classList.remove("hidden");
+    }
+
+    function login(e) {
+      e.preventDefault();
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const errorBox = document.getElementById("error");
+
+      const tempUser = "tempUser@gmail.com";
+      const tempPass = "tempPass123";
+
+      if (username === tempUser && password === tempPass) {
+        authSection.classList.add("hidden");
+        mainApp.classList.remove("hidden");
+        document.body.classList.remove("auth-body");
+        showDashboard();
+        updateDashboard();
+      } else {
+        errorBox.textContent = "Invalid credentials! Use tempUser@gmail.com / tempPass123";
+      }
+    }
+
+    function logout() {
+      authSection.classList.remove("hidden");
+      mainApp.classList.add("hidden");
+      document.body.classList.add("auth-body");
+      showLogin();
+      document.getElementById("error").textContent = "";
+    }
+
+    // Name validation — allow only letters and spaces
+    const nameInput = document.getElementById("registerName");
+    nameInput?.addEventListener("input", function () {
+      const valid = /^[a-zA-Z\s]*$/.test(this.value);
+      if (!valid) {
+        alert("Only letters and spaces are allowed in the name.");
+        this.value = this.value.replace(/[^a-zA-Z\s]/g, "");
+      }
+    });
+
+    // Contact validation — allow only numbers
+    const contactInput = document.getElementById("contactNumber");
+    contactInput?.addEventListener("input", function () {
+      const valid = /^[0-9]*$/.test(this.value);
+      if (!valid) {
+        alert("Only numbers are allowed in the contact number.");
+        this.value = this.value.replace(/[^0-9]/g, "");
+      }
+    });
+
+    // Register form submission
+    document.getElementById("registerForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const name = nameInput.value.trim();
+      const contact = contactInput.value.trim();
+
+      if (!/^[a-zA-Z\s]+$/.test(name)) {
+        alert("Name must contain only alphabets.");
+        return;
+      }
+      if (!/^\d+$/.test(contact)) {
+        alert("Contact must contain only numbers.");
+        return;
+      }
+
+      alert("Registered:\nName: " + name +
+        "\nEmail: " + document.getElementById("registerEmail").value +
+        "\nContact: " + contact +
+        "\nAddress: " + document.getElementById("address").value);
+      showLogin();
+    });
+
+    // Forgot password form submission
+    document.getElementById("forgotForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      alert("Reset link sent to: " + document.getElementById("forgotEmail").value);
+      showLogin();
+    });
+
+    // Navigation functions
+    function showDashboard() {
+      hideAllSections();
+      document.getElementById("dashboardSection").classList.remove("hidden");
+    }
+
+    function showClients() {
+      hideAllSections();
+      document.getElementById("clientsSection").classList.remove("hidden");
+      updateClientsTable();
+    }
+
+    function showNewInvoice() {
+      hideAllSections();
+      document.getElementById("newInvoiceSection").classList.remove("hidden");
+      updateClientSelect();
+    }
+
+    function showInvoiceHistory() {
+      hideAllSections();
+      document.getElementById("invoiceHistorySection").classList.remove("hidden");
+      updateInvoiceHistoryTable();
+    }
+
+    function showInvoiceDetail(invoiceId) {
+      hideAllSections();
+      document.getElementById("invoiceDetailSection").classList.remove("hidden");
+      displayInvoiceDetail(invoiceId);
+    }
+
+    function hideAllSections() {
+      const sections = ["dashboardSection", "clientsSection", "newInvoiceSection", "invoiceHistorySection", "invoiceDetailSection"];
+      sections.forEach(section => {
+        document.getElementById(section).classList.add("hidden");
+      });
+    }
+
+    // Client management
+    document.getElementById("clientForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const client = {
+        id: clients.length + 1,
+        name: formData.get("name"),
+        email: formData.get("email"),
+        address: formData.get("address"),
+        invoiceCount: 0,
+        totalPaid: 0
+      };
+
+      clients.push(client);
+      e.target.reset();
+      updateClientsTable();
+      updateDashboard();
+      alert("Client added successfully!");
+    });
+
+    function updateClientsTable() {
+      const tbody = document.getElementById("clientsTable");
+      if (clients.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center">No clients yet</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = clients.map(client => `
+        <tr>
+          <td>${client.name}</td>
+          <td>${client.email}</td>
+          <td>${client.address}</td>
+          <td>
+            <button class="btn btn-sm btn-danger" onclick="deleteClient(${client.id})">Delete</button>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function deleteClient(clientId) {
+      if (confirm("Are you sure you want to delete this client?")) {
+        clients = clients.filter(c => c.id !== clientId);
+        updateClientsTable();
+        updateDashboard();
+        updateClientSelect();
+      }
+    }
+
+    function updateClientSelect() {
+      const select = document.getElementById("clientSelect");
+      select.innerHTML = '<option disabled selected>Select Client</option>';
+      clients.forEach(client => {
+        select.innerHTML += `<option value="${client.id}">${client.name} - ${client.email}</option>`;
+      });
+    }
+
+    // Invoice management
+    document.getElementById("invoiceForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      
+      // Get all line items
+      const itemRows = document.querySelectorAll("#items .line-item");
+      const lineItems = [];
+      
+      itemRows.forEach(row => {
+        const description = row.querySelector('input[name="description"]').value;
+        const quantity = parseFloat(row.querySelector('input[name="quantity"]').value);
+        const price = parseFloat(row.querySelector('input[name="price"]').value);
+        
+        lineItems.push({
+          description: description,
+          quantity: quantity,
+          price: price
+        });
+      });
+
+      const clientId = parseInt(formData.get("client_id"));
+      const client = clients.find(c => c.id === clientId);
+      
+      if (!client) {
+        alert("Please select a valid client");
+        return;
+      }
+
+      const subtotal = lineItems.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+      const taxPercent = parseFloat(formData.get("tax_percent"));
+      const taxAmount = (subtotal * taxPercent) / 100;
+      const total = subtotal + taxAmount;
+
+      const invoice = {
+        id: ++currentInvoiceId,
+        freelancerName: formData.get("freelancer_name"),
+        freelancerEmail: formData.get("freelancer_email"),
+        freelancerAddress: formData.get("freelancer_address"),
+        client: client,
+        lineItems: lineItems,
+        taxPercent: taxPercent,
+        subtotal: subtotal,
+        taxAmount: taxAmount,
+        total: total,
+        createdAt: new Date()
+      };
+
+      invoices.push(invoice);
+      
+      // Update client stats
+      client.invoiceCount++;
+      client.totalPaid += total;
+
+      e.target.reset();
+      document.getElementById("items").innerHTML = `
+        <div class="row line-item">
+          <div class="col"><input name="description" class="form-input" placeholder="Description" required></div>
+          <div class="col"><input type="number" name="quantity" class="form-input" placeholder="Qty" required></div>
+          <div class="col"><input type="number" step="0.01" name="price" class="form-input" placeholder="Price" required></div>
+          <div class="col-auto"><button type="button" class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button></div>
+        </div>
+      `;
+      
+      updateDashboard();
+      alert("Invoice created successfully!");
+    });
+
+    function addItem() {
+      const itemRow = document.createElement('div');
+      itemRow.className = 'row line-item';
+      itemRow.innerHTML = `
+        <div class="col"><input name="description" class="form-input" placeholder="Description" required></div>
+        <div class="col"><input type="number" name="quantity" class="form-input" placeholder="Qty" required></div>
+        <div class="col"><input type="number" step="0.01" name="price" class="form-input" placeholder="Price" required></div>
+        <div class="col-auto"><button type="button" class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button></div>
+      `;
+      document.getElementById('items').appendChild(itemRow);
+    }
+
+    function removeItem(button) {
+      const itemRows = document.querySelectorAll("#items .line-item");
+      if (itemRows.length > 1) {
+        button.closest('.line-item').remove();
+      } else {
+        alert("At least one item is required");
+      }
+    }
+
+    function updateInvoiceHistoryTable() {
+      const tbody = document.getElementById("invoiceHistoryTable");
+      if (invoices.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center">No invoices yet</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = invoices.map(invoice => `
+        <tr>
+          <td>${invoice.id}</td>
+          <td>${invoice.client.name}</td>
+          <td>${invoice.createdAt.toLocaleDateString()}</td>
+          <td>${invoice.taxPercent}%</td>
+          <td>₹${invoice.total.toFixed(2)}</td>
+          <td>
+            <div class="btn-group">
+              <button class="btn btn-sm btn-success" onclick="showInvoiceDetail(${invoice.id})">View</button>
+              <button class="btn btn-sm btn-info" onclick="printInvoice(${invoice.id})">Print</button>
+              <button class="btn btn-sm btn-danger" onclick="deleteInvoice(${invoice.id})">Delete</button>
+            </div>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function deleteInvoice(invoiceId) {
+      if (confirm("Are you sure you want to delete this invoice?")) {
+        const invoice = invoices.find(inv => inv.id === invoiceId);
+        if (invoice) {
+          // Update client stats
+          const client = clients.find(c => c.id === invoice.client.id);
+          if (client) {
+            client.invoiceCount--;
+            client.totalPaid -= invoice.total;
+          }
+        }
+        
+        invoices = invoices.filter(inv => inv.id !== invoiceId);
+        updateInvoiceHistoryTable();
+        updateDashboard();
+      }
+    }
+
+    function displayInvoiceDetail(invoiceId) {
+      const invoice = invoices.find(inv => inv.id === invoiceId);
+      if (!invoice) return;
+
+      // Update freelancer info
+      document.getElementById("invoiceFreelancerInfo").innerHTML = `
+        ${invoice.freelancerName}<br>
+        ${invoice.freelancerEmail}<br>
+        ${invoice.freelancerAddress}
+      `;
+
+      // Update client info
+      document.getElementById("invoiceClientInfo").innerHTML = `
+        ${invoice.client.name}<br>
+        ${invoice.client.email}<br>
+        ${invoice.client.address}
+      `;
+
+      // Update invoice date
+      document.getElementById("invoiceDate").textContent = invoice.createdAt.toLocaleDateString();
+
+      // Update items table
+      const itemsTable = document.getElementById("invoiceItemsTable");
+      itemsTable.innerHTML = invoice.lineItems.map(item => `
+        <tr>
+          <td>${item.description}</td>
+          <td>${item.quantity}</td>
+          <td>₹${item.price.toFixed(2)}</td>
+          <td>₹${(item.quantity * item.price).toFixed(2)}</td>
+        </tr>
+      `).join("");
+
+      // Update summary
+      document.getElementById("invoiceSummary").innerHTML = `
+        <p><strong>Subtotal:</strong> ₹${invoice.subtotal.toFixed(2)}</p>
+        <p><strong>Tax (${invoice.taxPercent}%):</strong> ₹${invoice.taxAmount.toFixed(2)}</p>
+        <p><strong>Total:</strong> ₹${invoice.total.toFixed(2)}</p>
+      `;
+    }
+
+    function printInvoice(invoiceId = null) {
+      if (invoiceId) {
+        showInvoiceDetail(invoiceId);
+      }
+      setTimeout(() => {
+        window.print();
+      }, 100);
+    }
+
+    function updateDashboard() {
+      // Update totals
+      document.getElementById("totalClients").textContent = clients.length;
+      document.getElementById("totalInvoices").textContent = invoices.length;
+      
+      const totalTax = invoices.reduce((sum, inv) => sum + inv.taxAmount, 0);
+      const totalRevenue = invoices.reduce((sum, inv) => sum + inv.total, 0);
+      
+      document.getElementById("totalTax").textContent = `₹${totalTax.toFixed(2)}`;
+      document.getElementById("totalRevenue").textContent = `₹${totalRevenue.toFixed(2)}`;
+
+      // Update client summary table
+      const tbody = document.getElementById("clientSummaryTable");
+      if (clients.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center">No clients yet</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = clients.map(client => `
+        <tr>
+          <td>${client.name}</td>
+          <td>${client.email}</td>
+          <td>${client.invoiceCount}</td>
+          <td>₹${client.totalPaid.toFixed(2)}</td>
+        </tr>
+      `).join("");
+    }
+
+    // Initialize app
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add some demo data
+      clients = [
+        {
+          id: 1,
+          name: "John Doe",
+          email: "john@example.com",
+          address: "123 Main St, City, State",
+          invoiceCount: 0,
+          totalPaid: 0
+        },
+        {
+          id: 2,
+          name: "Jane Smith",
+          email: "jane@example.com",
+          address: "456 Oak Ave, City, State",
+          invoiceCount: 0,
+          totalPaid: 0
+        }
+      ];
+
+      currentInvoiceId = 0;
+      updateDashboard();
+    });
+  </script>
+
+</body>
+</html>
